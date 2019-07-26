@@ -1,0 +1,70 @@
+<resources>
+    <string name="app_name">Zar3ty Seller</string>
+    <!--Sign Up Strings Start-->
+    <string name="zar3ty">Z a r 3 t y</string>
+    <string name="user_name_edit_text_hint">User Name</string>
+    <string name="email_edit_text_hint">Email</string>
+    <string name="password_edit_text_hint">Password</string>
+    <string name="confirm_password_edit_text_hint">Confirm Password</string>
+    <string name="phone_edit_text_hint">Phone Number</string>
+    <string name="national_id_edit_text_hint">National ID</string>
+    <string name="i_agree_with_terms_and_conditions">I agree with terms and conditions</string>
+    <string name="sign_up_btn">Sign Up</string>
+    <string name="already_have_an_account_sign_in">Already have an account? Sign in.</string>
+    <string name="customer_radio">Customer</string>
+    <string name="seller_radio">Seller</string>
+    <string name="male_radio">Male</string>
+    <string name="female_radio">Female</string>
+    <!--Sign Up Strings End-->
+
+    <!--Login Strings Start-->
+    <string name="login_email_edit_text_hint">Email</string>
+    <string name="login_password_edit_text_hint">Password</string>
+    <string name="login_remember_me">Remember Me</string>
+    <string name="login_forgot_password">Forgot Password ?</string>
+    <string name="login_login_btn">Login</string>
+    <string name="login_terms_policy">Term of use. Privacy policy</string>
+    <!--Login Strings End-->
+    <!--Sales Strings Start-->
+    <string name="sales_item_title_hint">Title</string>
+    <string name="sales_item_description_hint">Description</string>
+    <string name="sales_item_price_hint">Price</string>
+    <string name="sales_item_quantity_hint">Quantity</string>
+    <string name="sales_upload_btn">Upload</string>
+
+    <string name="seller_update_user_data_btn">Update Data</string>
+    <string name="seller_update_user_country_hint">Update Your Country</string>
+    <string name="seller_update_user_phone_hint">Update Your Phone</string>
+    <string name="update_update_user_last_name_hint">Update Your Last Name</string>
+    <string name="seller_update_user_first_name_hint">Update Your First Name</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="seller_update_user_name_hint">Update Your Name</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="SalesItemInfoTitleTag">Item Title :</string>
+    <string name="SalesItemInfoDescriptionTag">Item Description :</string>
+    <string name="SalesItemInfoQuantityTag">Item Quantity :</string>
+    <string name="SalesItemInfoPriceTag">Item Price :</string>
+    <string name="SalesItemInfoDateTag">Upload Date :</string>
+    <string name="sales_item_info_contact_btn">Contact with Seller</string>
+    <string name="item_dialogue_quantity_hint">Amount You Need</string>
+    <string name="item_dialogue_total_price">Total Price :</string>
+    <string name="message_edit_hint">Type a message ...</string>
+    <string name="chat_item_left_user_name">UserName</string>
+    <string name="UpdateYourData">Update Your Data</string>
+    <string name="seller_sales_item_info_update_btn">Update your item</string>
+    <string name="sales_update_item_title_hint">Update Item Title</string>
+    <string name="sales_update_item_price_hint">Update Item Price</string>
+    <string name="sales_update_item_description_hint">Update Item Description</string>
+    <string name="sales_update_item_info_update_btn">Update</string>
+    <string name="UpdateItemData">Update Item Data</string>
+    <string name="SalesItemInfoCategoryTag">Item Category :</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="item_update_item_item_hint">Update Item Title</string>
+    <string name="item_update_item_description_hint">Update Item Description</string>
+    <string name="item_update_item_price_hint">Update Item Price</string>
+</resources>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:paddingTop="8dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="8dp"
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/seller_card_item_row"
+        android:layout_width="175dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/seller_item_img_row"
+                android:layout_width="175dp"
+                android:layout_height="150dp"
+                android:layout_marginBottom="8dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription,MissingConstraints" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/seller_item_title_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Title"
+                    android:textColor="#000"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+
+                <TextView
+                    android:id="@+id/seller_item_price_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Price"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+                <TextView
+                    android:id="@+id/seller_item_date_row"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Date"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+                <TextView
+                    android:id="@+id/seller_item_date_to_show_row"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Date"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+                <TextView
+                    android:id="@+id/seller_item_description_row"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Date"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+                <TextView
+                    android:id="@+id/seller_item_user_id_row"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Date"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+                <TextView
+                    android:id="@+id/seller_item_category_row"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Date"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+                <TextView
+                    android:id="@+id/seller_item_user_email_row"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Date"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+                <TextView
+                    android:id="@+id/seller_item_user_phone_row"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Item Date"
+                    android:textColor="#000"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText,RtlHardcoded" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "495050917321",
+    "firebase_url": "https://zar3ty2020.firebaseio.com",
+    "project_id": "zar3ty2020",
+    "storage_bucket": "zar3ty2020.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495050917321:android:3f1f6dd0c81a88e9",
+        "android_client_info": {
+          "package_name": "com.elasdka2.zar3tyseller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "495050917321-af0d2hrv8au59od41nbmktrfscf48c80.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elasdka2.zar3tyseller",
+            "certificate_hash": "9dc154a6c835bdd18e1971ab0f59871561176ad5"
+          }
+        },
+        {
+          "client_id": "495050917321-atb3v2j0cqrmcvo5qevo41v7nmvgd2g7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByCITNfgz6GfJRt9yTWfyNnd-auv6wuBE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "495050917321-atb3v2j0cqrmcvo5qevo41v7nmvgd2g7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
