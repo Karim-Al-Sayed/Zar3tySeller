@@ -111,7 +111,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
         //--------------------------------
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         userList = new ArrayList<>();
-
+        //----------------------------------------------------------------------------------------
         reference = FirebaseDatabase.getInstance().getReference("ChatList").child(fuser.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
