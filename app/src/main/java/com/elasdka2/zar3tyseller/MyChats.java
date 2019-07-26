@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -59,12 +60,12 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
     private SellerChatsAdapter userAdapter;
     private List<Users> mUsers;
     private List<ChatList> userList;
-    FirebaseUser fuser;
-    DatabaseReference reference;
+    private FirebaseUser fuser;
+    private DatabaseReference reference;
     //----------------------------------------------
     @BindView(R.id.Chats_Recycler)
     RecyclerView recyclerView;
-    @BindView(R.id.display_chat_seller_activity)
+    @BindView(R.id.display_chat_activity)
     ConstraintLayout constraintLayout;
     //----------------------------------------------
     public MyChats() {
@@ -99,7 +100,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.my_chats_frag, container, false);
@@ -188,9 +189,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
 
             Snackbar snackbar =
                     Snackbar.make(constraintLayout,UserName + " Has Been Removed !",Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", v -> {
-                userAdapter.RestoreChat(DeletedUser,DeleteIndex);
-            });
+            snackbar.setAction("UNDO", v -> userAdapter.RestoreChat(DeletedUser,DeleteIndex));
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
         }

@@ -38,7 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.ViewHolder> {
     private Context context;
     private List<Users> mUsers;
-    String theLastMessage;
+    private String theLastMessage;
     public SellerChatsAdapter(Context context, List<Users> mUsers){
         this.context = context;
         this.mUsers = mUsers;
@@ -72,7 +72,6 @@ public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.
             args.putString("UniqueID", "from_SellerChatsAdapter");
             args.putString("user_id",user.getUser_ID());
             fragment.setArguments(args);
-
             FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
             FragmentTransaction fragmentTransaction1 = manager.beginTransaction();
             fragmentTransaction1.replace(R.id.Frame_Content, fragment);
@@ -96,11 +95,11 @@ public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView UserName,LastMsg;
-        public CircleImageView UserImg;
-        public CardView ChatCard;
-        public ConstraintLayout view_foreground, view_background;
-        public ViewHolder(@NonNull View itemView) {
+        TextView UserName,LastMsg;
+        CircleImageView UserImg;
+        CardView ChatCard;
+        ConstraintLayout view_foreground, view_background;
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             UserName = itemView.findViewById(R.id.user_username_row);
             LastMsg = itemView.findViewById(R.id.user_last_msg_row);
@@ -117,6 +116,7 @@ public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
 
         reference.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -130,14 +130,10 @@ public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.
                     }
                 }
 
-                switch (theLastMessage){
-                    case  "default":
-                        last_msg.setText("No Message");
-                        break;
-
-                    default:
-                        last_msg.setText(theLastMessage);
-                        break;
+                if ("default".equals(theLastMessage)) {
+                    last_msg.setText("No Message");
+                } else {
+                    last_msg.setText(theLastMessage);
                 }
 
                 theLastMessage = "default";
