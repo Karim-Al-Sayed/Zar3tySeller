@@ -51,7 +51,7 @@
     <string name="sales_item_info_contact_btn">Contact with Seller</string>
     <string name="item_dialogue_quantity_hint">Amount You Need</string>
     <string name="item_dialogue_total_price">Total Price :</string>
-    <string name="message_edit_hint">Type a message ...</string>
+    <string name="message_edit_hint">Type a message …</string>
     <string name="chat_item_left_user_name">UserName</string>
     <string name="UpdateYourData">Update Your Data</string>
     <string name="seller_sales_item_info_update_btn">Update your item</string>
@@ -67,4 +67,5 @@
     <string name="item_update_item_item_hint">Update Item Title</string>
     <string name="item_update_item_description_hint">Update Item Description</string>
     <string name="item_update_item_price_hint">Update Item Price</string>
+    <string name="hello">hello</string>
 </resources>

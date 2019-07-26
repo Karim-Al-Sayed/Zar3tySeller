@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.elasdka2.zar3tyseller.Adapters.SellerChatsAdapter;
+import com.elasdka2.zar3tyseller.Adapters.DisplayChatsAdapter;
 import com.elasdka2.zar3tyseller.Helper.ChatsRecylcerItemTouchHelperListener;
 import com.elasdka2.zar3tyseller.Helper.ChatsSellerRecylcerItemTouchHelper;
 import com.elasdka2.zar3tyseller.Model.ChatList;
@@ -57,7 +57,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
     private OnFragmentInteractionListener mListener;
     //----------------------------------------------
     Context context;
-    private SellerChatsAdapter userAdapter;
+    private DisplayChatsAdapter userAdapter;
     private List<Users> mUsers;
     private List<ChatList> userList;
     private FirebaseUser fuser;
@@ -163,7 +163,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
                         }
                     }
                 }
-                userAdapter = new SellerChatsAdapter(context,mUsers);
+                userAdapter = new DisplayChatsAdapter(context,mUsers);
                 recyclerView.setAdapter(userAdapter);
             }
 
@@ -179,7 +179,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
     }
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof SellerChatsAdapter.ViewHolder){
+        if (viewHolder instanceof DisplayChatsAdapter.ViewHolder){
             String UserName = mUsers.get(viewHolder.getAdapterPosition()).getUserName();
 
             final  Users DeletedUser = mUsers.get(viewHolder.getAdapterPosition());

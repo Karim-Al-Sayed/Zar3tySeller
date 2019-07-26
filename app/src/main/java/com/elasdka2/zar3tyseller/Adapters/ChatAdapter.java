@@ -17,15 +17,15 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
 
 
-public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder>  {
-    public static final int MSG_TYPE_LEFT = 0;
-    public static final int MSG_TYPE_RIGHT = 1;
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>  {
+    private static final int MSG_TYPE_LEFT = 0;
+    private static final int MSG_TYPE_RIGHT = 1;
 
-    Context context;
+    private Context context;
     private List<Chat> mChat;
-    FirebaseUser MyUser;
+    private FirebaseUser MyUser;
 
-    public MessageAdapter(Context context, List<Chat> mChat) {
+    public ChatAdapter(Context context, List<Chat> mChat) {
         this.mChat = mChat;
         this.context = context;
     }
@@ -55,9 +55,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         return mChat.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView message, username;
-        public MyViewHolder(@NonNull View itemView) {
+        MyViewHolder(@NonNull View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.show_message);
             username = itemView.findViewById(R.id.chat_item_left_user_name);

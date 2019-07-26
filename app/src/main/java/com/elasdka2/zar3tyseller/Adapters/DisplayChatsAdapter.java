@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.elasdka2.zar3tyseller.ChatAct;
 import com.elasdka2.zar3tyseller.Message;
 import com.elasdka2.zar3tyseller.Model.ChatSeller;
 import com.elasdka2.zar3tyseller.Model.Users;
@@ -35,11 +36,11 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.ViewHolder> {
+public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapter.ViewHolder> {
     private Context context;
     private List<Users> mUsers;
     private String theLastMessage;
-    public SellerChatsAdapter(Context context, List<Users> mUsers){
+    public DisplayChatsAdapter(Context context, List<Users> mUsers){
         this.context = context;
         this.mUsers = mUsers;
     }
@@ -49,7 +50,7 @@ public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.chat_item_row,parent,false);
 
-        return new SellerChatsAdapter.ViewHolder(view);
+        return new DisplayChatsAdapter.ViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
@@ -67,15 +68,11 @@ public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.
             ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             */
 
-            Message fragment = new Message();
-            Bundle args = new Bundle();
-            args.putString("UniqueID", "from_SellerChatsAdapter");
-            args.putString("user_id",user.getUser_ID());
-            fragment.setArguments(args);
-            FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction1 = manager.beginTransaction();
-            fragmentTransaction1.replace(R.id.Frame_Content, fragment);
-            fragmentTransaction1.commit();
+            Intent intent = new Intent(context, ChatAct.class);
+            intent.putExtra("UniqueID","from_DisplayChatsAdapter");
+            intent.putExtra("SellerID",user.getUser_ID());
+            context.startActivity(intent);
+            ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });
     }
 
@@ -98,7 +95,7 @@ public class SellerChatsAdapter extends RecyclerView.Adapter<SellerChatsAdapter.
         TextView UserName,LastMsg;
         CircleImageView UserImg;
         CardView ChatCard;
-        ConstraintLayout view_foreground, view_background;
+        public ConstraintLayout view_foreground, view_background;
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             UserName = itemView.findViewById(R.id.user_username_row);
