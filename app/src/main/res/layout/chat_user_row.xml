@@ -45,6 +45,8 @@
         app:layout_constraintBottom_toBottomOf="@id/view_foreground"
         app:layout_constraintStart_toStartOf="@id/view_foreground"
         app:layout_constraintEnd_toEndOf="@id/view_foreground"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

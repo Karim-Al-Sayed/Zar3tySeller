@@ -4,23 +4,18 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.elasdka2.zar3tyseller.ChatAct;
-import com.elasdka2.zar3tyseller.Message;
 import com.elasdka2.zar3tyseller.Model.ChatSeller;
 import com.elasdka2.zar3tyseller.Model.Users;
 import com.elasdka2.zar3tyseller.R;
@@ -48,7 +43,7 @@ public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapte
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.chat_item_row,parent,false);
+        View view = LayoutInflater.from(context).inflate(R.layout.chat_user_row,parent,false);
 
         return new DisplayChatsAdapter.ViewHolder(view);
     }
@@ -74,6 +69,7 @@ public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapte
             context.startActivity(intent);
             ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });
+
     }
 
     @Override

@@ -4,13 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +23,8 @@ import com.elasdka2.zar3tyseller.Helper.ChatsRecylcerItemTouchHelperListener;
 import com.elasdka2.zar3tyseller.Helper.ChatsSellerRecylcerItemTouchHelper;
 import com.elasdka2.zar3tyseller.Model.ChatList;
 import com.elasdka2.zar3tyseller.Model.Users;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,7 +67,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
     private List<Users> mUsers;
     private List<ChatList> userList;
     private FirebaseUser fuser;
-    private DatabaseReference reference;
+    private DatabaseReference reference,reference2;
     //----------------------------------------------
     @BindView(R.id.Chats_Recycler)
     RecyclerView recyclerView;
@@ -113,6 +119,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
         userList = new ArrayList<>();
         //----------------------------------------------------------------------------------------
         reference = FirebaseDatabase.getInstance().getReference("ChatList").child(fuser.getUid());
+        reference2 = FirebaseDatabase.getInstance().getReference("ChatList");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -181,17 +188,30 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof DisplayChatsAdapter.ViewHolder){
             String UserName = mUsers.get(viewHolder.getAdapterPosition()).getUserName();
+            String UserID = mUsers.get(viewHolder.getAdapterPosition()).getUser_ID();
 
             final  Users DeletedUser = mUsers.get(viewHolder.getAdapterPosition());
             final  int  DeleteIndex = viewHolder.getAdapterPosition();
 
             userAdapter.RemoveChat(DeleteIndex);
+            reference2.child(fuser.getUid()).child(UserID).removeValue().addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    reference2.child(UserID).child(fuser.getUid()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Snackbar snackbar =
+                                        Snackbar.make(constraintLayout,UserName + " Has Been Removed !",Snackbar.LENGTH_LONG);
+                                       /*snackbar.setAction("UNDO", v -> userAdapter.RestoreChat(DeletedUser,DeleteIndex));
+                                         snackbar.setActionTextColor(Color.YELLOW);*/
+                                         snackbar.show();
+                            }else Toast.makeText(context, Objects.requireNonNull(task.getException()).getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-            Snackbar snackbar =
-                    Snackbar.make(constraintLayout,UserName + " Has Been Removed !",Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", v -> userAdapter.RestoreChat(DeletedUser,DeleteIndex));
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
+                }else Toast.makeText(context, Objects.requireNonNull(task.getException()).getMessage(),Toast.LENGTH_SHORT).show();
+            });
+
         }
     }
 
@@ -227,6 +247,25 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
             public void onCancelled(DatabaseError databaseError) {
 
             }
+        });
+        Objects.requireNonNull(getView()).setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener((v, keyCode, event) -> {
+
+            if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                Personal fragment = new Personal();
+                FragmentTransaction fragmentTransaction1 = null;
+                if (getFragmentManager() != null) {
+                    fragmentTransaction1 = getFragmentManager().beginTransaction();
+                }
+                if (fragmentTransaction1 != null) {
+                    fragmentTransaction1.replace(R.id.Frame_Content, fragment);
+                    fragmentTransaction1.commit();
+                }
+
+                return true;
+            }
+            return false;
         });
     }
 
