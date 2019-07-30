@@ -1,33 +1,33 @@
 package com.elasdka2.zar3tyseller.Model;
 
 public class Chat {
-    public String sender;
-    public String receiver;
+    public String from;
+    public String to;
     public String message;
 
     public Chat() {
     }
 
-    public Chat(String sender, String receiver, String message) {
-        this.sender = sender;
-        this.receiver = receiver;
+    public Chat(String from, String to, String message) {
+        this.from = from;
+        this.to = to;
         this.message = message;
     }
 
-    public String getSender() {
-        return sender;
+    public String getFrom() {
+        return from;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
-    public String getReceiver() {
-        return receiver;
+    public String getTo() {
+        return to;
     }
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver;
+    public void setTo(String to) {
+        this.to = to;
     }
 
     public String getMessage() {

@@ -45,8 +45,9 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".SignUp"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize">
 
+        </activity>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-9443216844473207~5221027236" />

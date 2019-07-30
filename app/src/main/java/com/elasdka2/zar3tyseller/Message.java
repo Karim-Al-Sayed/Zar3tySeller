@@ -208,8 +208,8 @@ public class Message extends Fragment {
                 mchat.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat != null && (chat.getReceiver().equals(CustomerID) && chat.getSender().equals(SellerID) ||
-                            chat.getReceiver().equals(SellerID) && chat.getSender().equals(CustomerID))) {
+                    if (chat != null && (chat.getTo().equals(CustomerID) && chat.getFrom().equals(SellerID) ||
+                            chat.getTo().equals(SellerID) && chat.getFrom().equals(CustomerID))) {
                         mchat.add(chat);
                     }
                     messageAdapter = new ChatAdapter(context,mchat);

@@ -56,12 +56,7 @@ public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapte
         Glide.with(context).load(user.getImgUri()).into(holder.UserImg);
         lastMessage(user.getUser_ID(), holder.LastMsg);
         holder.ChatCard.setOnClickListener(v -> {
-           /* Intent intent = new Intent(context, Message.class);
-            intent.putExtra("UniqueID","from_SellerChatsAdapter");
-            intent.putExtra("user_id",user.getUser_ID());
-            context.startActivity(intent);
-            ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-            */
+
 
             Intent intent = new Intent(context, ChatAct.class);
             intent.putExtra("UniqueID","from_DisplayChatsAdapter");
@@ -115,8 +110,8 @@ public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapte
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     ChatSeller chatSeller = snapshot.getValue(ChatSeller.class);
                     if (firebaseUser != null && chatSeller != null) {
-                        if (chatSeller.getReceiver().equals(firebaseUser.getUid()) && chatSeller.getSender().equals(userid) ||
-                                chatSeller.getReceiver().equals(userid) && chatSeller.getSender().equals(firebaseUser.getUid())) {
+                        if (chatSeller.getTo().equals(firebaseUser.getUid()) && chatSeller.getFrom().equals(userid) ||
+                                chatSeller.getTo().equals(userid) && chatSeller.getFrom().equals(firebaseUser.getUid())) {
                             theLastMessage = chatSeller.getMessage();
                         }
 

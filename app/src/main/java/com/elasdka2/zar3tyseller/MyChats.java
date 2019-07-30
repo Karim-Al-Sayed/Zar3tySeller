@@ -200,6 +200,7 @@ public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperLis
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()){
+
                                 Snackbar snackbar =
                                         Snackbar.make(constraintLayout,UserName + " Has Been Removed !",Snackbar.LENGTH_LONG);
                                        /*snackbar.setAction("UNDO", v -> userAdapter.RestoreChat(DeletedUser,DeleteIndex));

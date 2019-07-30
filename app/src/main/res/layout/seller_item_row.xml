@@ -14,11 +14,12 @@
         android:layout_width="175dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <LinearLayout
+        app:layout_constraintTop_toTopOf="parent"
+        android:foreground="?android:attr/selectableItemBackground"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/seller_item_img_row"
                 android:layout_width="175dp"
@@ -26,20 +27,25 @@
                 android:layout_marginBottom="8dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="ContentDescription,MissingConstraints" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
                 <TextView
                     android:id="@+id/seller_item_title_row"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxWidth="100dp"
+                    android:maxLines="1"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/seller_item_img_row"
                     android:text="Item Title"
                     android:textColor="#000"
                     android:textStyle="bold"
@@ -49,14 +55,33 @@
                     android:id="@+id/seller_item_price_row"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxWidth="100dp"
+                    android:maxLines="1"
                     android:layout_marginStart="12dp"
                     android:layout_marginLeft="12dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/seller_item_title_row"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:text="Item Price"
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText,RtlHardcoded" />
+                <ImageButton
+                    android:id="@+id/setting_item_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/seller_item_img_row"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:background="@drawable/ic_dots"
+                    tools:ignore="RtlHardcoded" />
                 <TextView
                     android:id="@+id/seller_item_date_row"
                     android:visibility="gone"
@@ -69,7 +94,7 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
+                    tools:ignore="HardcodedText,MissingConstraints,RtlHardcoded" />
                 <TextView
                     android:id="@+id/seller_item_date_to_show_row"
                     android:visibility="gone"
@@ -82,7 +107,7 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
+                    tools:ignore="HardcodedText,MissingConstraints,RtlHardcoded" />
                 <TextView
                     android:id="@+id/seller_item_description_row"
                     android:visibility="gone"
@@ -95,7 +120,7 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
+                    tools:ignore="HardcodedText,MissingConstraints,RtlHardcoded" />
                 <TextView
                     android:id="@+id/seller_item_user_id_row"
                     android:visibility="gone"
@@ -108,7 +133,7 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
+                    tools:ignore="HardcodedText,MissingConstraints,RtlHardcoded" />
                 <TextView
                     android:id="@+id/seller_item_category_row"
                     android:visibility="gone"
@@ -121,7 +146,7 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
+                    tools:ignore="HardcodedText,MissingConstraints,RtlHardcoded" />
                 <TextView
                     android:id="@+id/seller_item_user_email_row"
                     android:visibility="gone"
@@ -134,7 +159,7 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
+                    tools:ignore="HardcodedText,MissingConstraints,RtlHardcoded" />
                 <TextView
                     android:id="@+id/seller_item_user_phone_row"
                     android:visibility="gone"
@@ -147,13 +172,8 @@
                     android:textColor="#000"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    tools:ignore="HardcodedText,RtlHardcoded" />
+                    tools:ignore="HardcodedText,MissingConstraints,RtlHardcoded" />
 
-            </LinearLayout>
-        </LinearLayout>
-
+            </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
