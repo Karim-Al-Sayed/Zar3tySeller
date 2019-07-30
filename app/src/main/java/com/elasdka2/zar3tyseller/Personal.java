@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,11 +67,10 @@ public class Personal extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference UserRef;
 
-    String CurrentUserID;
-    String ImgUri, UserName, Phone, Country, Mail;
-
-   /* @BindView(R.id.adView)
-    AdView mAdView;*/
+    String ImgUri, UserName, Phone, Country, CurrentUserID, intent_from;
+    View v;
+    /* @BindView(R.id.adView)
+     AdView mAdView;*/
     @BindView(R.id.welcome_name_txt)
     TextView welcome_name;
     @BindView(R.id.email_txt)
@@ -105,13 +105,15 @@ public class Personal extends Fragment {
         fragmentTransaction1.replace(R.id.Frame_Content, fragment);
         fragmentTransaction1.commit();
     }
+
     @OnClick(R.id.MyItemsCard)
     public void GoToMyItems() {
         MyItems fragment = new MyItems();
         FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
-        fragmentTransaction1.replace(R.id.Frame_Content, fragment,"MyItems");
+        fragmentTransaction1.replace(R.id.Frame_Content, fragment, "MyItems");
         fragmentTransaction1.commit();
     }
+
     @OnClick(R.id.MyChatsCard)
     public void GoToMyChats() {
         MyChats fragment = new MyChats();
@@ -119,23 +121,26 @@ public class Personal extends Fragment {
         fragmentTransaction1.replace(R.id.Frame_Content, fragment);
         fragmentTransaction1.commit();
     }
+
     @OnClick(R.id.MyRatesCard)
-    public void GoToMyRates(){
-        Toast.makeText(context.getApplicationContext(),"it will done soon isa ...",Toast.LENGTH_SHORT).show();
+    public void GoToMyRates() {
+        Toast.makeText(context.getApplicationContext(), "it will done soon isa ...", Toast.LENGTH_SHORT).show();
     }
+
     @OnClick(R.id.MyOrdersCard)
-    public void GoToOrders(){
-        Toast.makeText(context.getApplicationContext(),"it will done soon isa ...",Toast.LENGTH_SHORT).show();
+    public void GoToOrders() {
+        Toast.makeText(context.getApplicationContext(), "it will done soon isa ...", Toast.LENGTH_SHORT).show();
     }
+
     @OnClick(R.id.sign_out_text)
-    public void SignOut(){
+    public void SignOut() {
         UserRef.child(CurrentUserID).child("token_id").removeValue().addOnCompleteListener(task -> {
             mAuth.signOut();
-            Intent intent = new Intent(context,Login.class);
+            Intent intent = new Intent(context, Login.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-            ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
-            ((Activity)context).finish();
+            ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            ((Activity) context).finish();
         });
     }
     //--------------------------------------------------
@@ -166,6 +171,23 @@ public class Personal extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        try {
+            if (getArguments() != null){
+                intent_from = getArguments().getString("UniqueID");
+                if (!TextUtils.isEmpty(intent_from)){
+                    if (intent_from.equals("DeleteItemCase")){
+                        MyItems fragment = new MyItems();
+                        FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
+                        fragmentTransaction1.replace(R.id.Frame_Content, fragment);
+                        fragmentTransaction1.commit();
+                    }else {
+                        Toast.makeText(getActivity(),"Empty",Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        }catch (Exception e){
+            Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+        }
         View v = inflater.inflate(R.layout.personal_frag, container, false);
         context = getActivity();
         ButterKnife.bind(this, v);
@@ -175,15 +197,12 @@ public class Personal extends Fragment {
         CurrentUserID = mAuth.getCurrentUser().getUid();
 
         SharedPreferences pref = context.getApplicationContext().getSharedPreferences("CurrentUser", MODE_PRIVATE);
-        welcome_name.setText(pref.getString("UserName",""));
-        welcome_mail.setText(pref.getString("UserMail",""));
+        welcome_name.setText(pref.getString("UserName", ""));
+        welcome_mail.setText(pref.getString("UserMail", ""));
 
-       /* if (getArguments() != null){
-            welcome_name.setText(getArguments().getString("CurrentUserName"));
-            welcome_mail.setText(getArguments().getString("CurrentUserMail"));
-        }*/
 
         return v;
+
     }
 
     @Override
@@ -193,7 +212,6 @@ public class Personal extends Fragment {
         /*MobileAds.initialize(context, "ca-app-pub-9443216844473207~5221027236");
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);*/
-
 
 
         UserRef.child(CurrentUserID).addValueEventListener(new ValueEventListener() {
@@ -219,6 +237,7 @@ public class Personal extends Fragment {
             }
         });
     }
+
     @Override
     public void onResume() {
 
@@ -235,9 +254,9 @@ public class Personal extends Fragment {
                 fragmentTransaction1.replace(R.id.Frame_Content, fragment, "SelectCategory");
                 fragmentTransaction1.commit();*/
                 if (doubleBackToExitPressedOnce) {
-                    ((Activity)context).moveTaskToBack(true);
+                    ((Activity) context).moveTaskToBack(true);
 
-                }else {
+                } else {
                     this.doubleBackToExitPressedOnce = true;
                     Toast.makeText(context, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
 
@@ -252,6 +271,7 @@ public class Personal extends Fragment {
             return false;
         });
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {

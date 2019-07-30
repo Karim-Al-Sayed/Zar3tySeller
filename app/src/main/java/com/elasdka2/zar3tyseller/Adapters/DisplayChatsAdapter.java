@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.elasdka2.zar3tyseller.ChatAct;
+import com.elasdka2.zar3tyseller.Model.Chat;
 import com.elasdka2.zar3tyseller.Model.ChatSeller;
 import com.elasdka2.zar3tyseller.Model.Users;
 import com.elasdka2.zar3tyseller.R;
@@ -57,10 +58,9 @@ public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapte
         lastMessage(user.getUser_ID(), holder.LastMsg);
         holder.ChatCard.setOnClickListener(v -> {
 
-
             Intent intent = new Intent(context, ChatAct.class);
             intent.putExtra("UniqueID","from_DisplayChatsAdapter");
-            intent.putExtra("SellerID",user.getUser_ID());
+            intent.putExtra("CustomerID",user.getUser_ID());
             context.startActivity(intent);
             ((Activity)context).overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         });
@@ -98,6 +98,7 @@ public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapte
         }
     }
     //check for last message
+//check for last message
     private void lastMessage(final String userid, final TextView last_msg){
         theLastMessage = "default";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -108,13 +109,15 @@ public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapte
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    ChatSeller chatSeller = snapshot.getValue(ChatSeller.class);
-                    if (firebaseUser != null && chatSeller != null) {
-                        if (chatSeller.getTo().equals(firebaseUser.getUid()) && chatSeller.getFrom().equals(userid) ||
-                                chatSeller.getTo().equals(userid) && chatSeller.getFrom().equals(firebaseUser.getUid())) {
-                            theLastMessage = chatSeller.getMessage();
+                    Chat chat = new Chat();
+                    chat.setTo(snapshot.child("to").getValue(String.class));
+                    chat.setFrom(snapshot.child("from").getValue(String.class));
+                    chat.setMessage(snapshot.child("message").getValue(String.class));
+                    if (firebaseUser != null) {
+                        if (chat.getTo().equals(firebaseUser.getUid()) && chat.getFrom().equals(userid) ||
+                                chat.getTo().equals(userid) && chat.getFrom().equals(firebaseUser.getUid())) {
+                            theLastMessage = chat.getMessage();
                         }
-
                     }
                 }
 
@@ -132,5 +135,4 @@ public class DisplayChatsAdapter extends RecyclerView.Adapter<DisplayChatsAdapte
 
             }
         });
-    }
-}
+    }}

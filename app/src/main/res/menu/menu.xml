@@ -10,7 +10,4 @@
     <item android:id="@+id/Setting" android:title="Support"
         tools:ignore="HardcodedText"
         android:icon="@drawable/ic_setting_vector"/>
-    <item android:id="@+id/Test" android:title="Test"
-        tools:ignore="HardcodedText"
-        android:icon="@drawable/ic_setting_vector"/>
 </menu>

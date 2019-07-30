@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.elasdka2.zar3tyseller.ItemInfo;
 import com.elasdka2.zar3tyseller.Model.SellerItems;
+import com.elasdka2.zar3tyseller.Personal;
 import com.elasdka2.zar3tyseller.R;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -125,8 +126,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
                                         Toast.makeText(context.getApplicationContext(),
                                                 sellerlist.get(position).getTitle() + " has been deleted successfully",
                                                 Toast.LENGTH_SHORT).show();
+
                                         sellerlist.remove(position);
-                                        sellerlist.notify();
                                         notifyItemRemoved(position);
                                         notifyItemRangeChanged(position, getItemCount());
                                     }
@@ -139,30 +140,37 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
 
             popup.show(); //showing popup menu
         }); //closing the setOnClickListener method
-        holder.Card_Item.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+        holder.Card_Item.setOnLongClickListener(v -> {
 
-                    AlertDialog alertDialog = new AlertDialog.Builder(v.getRootView().getContext()).create();
-                    alertDialog.setTitle("Warning !");
-                    alertDialog.setMessage("Delete " +holder.Item_Title.getText().toString());
+                AlertDialog alertDialog = new AlertDialog.Builder(v.getRootView().getContext()).create();
+                alertDialog.setTitle("Warning !");
+                alertDialog.setMessage("Delete " +holder.Item_Title.getText().toString());
 
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "DELETE",
-                            (dialog, which) -> SalesRef.child(sellerlist.get(position).getMaincategory())
-                                    .child(sellerlist.get(position).getDate()).removeValue().addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()){
-                                            Toast.makeText(context.getApplicationContext(),
-                                                    sellerlist.get(position).getTitle() + " has been deleted successfully",
-                                                    Toast.LENGTH_SHORT).show();
-                                            sellerlist.remove(position);
-                                            notifyItemRemoved(position);
-                                        }
-                                    }));
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", (dialog, which) -> dialog.dismiss());
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "DELETE",
+                        (dialog, which) -> SalesRef.child(sellerlist.get(position).getMaincategory())
+                                .child(sellerlist.get(position).getDate()).removeValue().addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(context.getApplicationContext(),
+                                                sellerlist.get(position).getTitle() + " has been deleted successfully",
+                                                Toast.LENGTH_SHORT).show();
+                                        Personal fragment = new Personal();
+                                        Bundle args = new Bundle();
+                                        args.putString("UniqueID","DeleteItemCase");
+                                        fragment.setArguments(args);
 
-                    alertDialog.show();
-                    return true;
-            }
+                                        FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                                        FragmentTransaction fragmentTransaction1 = manager.beginTransaction();
+                                        fragmentTransaction1.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
+                                        fragmentTransaction1.replace(R.id.Frame_Content, fragment);
+                                        fragmentTransaction1.commit();
+                                        sellerlist.remove(position);
+                                        notifyItemRemoved(position);
+                                    }
+                                }));
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", (dialog, which) -> dialog.dismiss());
+
+                alertDialog.show();
+                return true;
         });
     }
 

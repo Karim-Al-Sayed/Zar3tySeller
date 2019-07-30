@@ -56,12 +56,7 @@ public class Navigation extends AppCompatActivity implements ComplaintBottomShee
                     fragmentTransaction3.replace(R.id.Frame_Content,fragment3);
                     fragmentTransaction3.commit();
                     return true;
-                case R.id.Test :
-                    Message fragment4 = new Message();
-                    FragmentTransaction fragmentTransaction4 = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction4.replace(R.id.Frame_Content,fragment4);
-                    fragmentTransaction4.commit();
-                    return true;
+
             }
 
             return false;

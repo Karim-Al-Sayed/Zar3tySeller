@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.elasdka2.zar3tyseller.Adapters.ChatAdapter;
 import com.elasdka2.zar3tyseller.Model.Chat;
+import com.elasdka2.zar3tyseller.Model.ChatSeller;
 import com.elasdka2.zar3tyseller.Model.Tokens;
+import com.elasdka2.zar3tyseller.Model.User;
 import com.elasdka2.zar3tyseller.Model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -87,14 +89,14 @@ public class ChatAct extends AppCompatActivity {
             intent_from = Objects.requireNonNull(getIntent().getExtras()).getString("UniqueID");
             if (!TextUtils.isEmpty(intent_from)) {
                 if (intent_from.equals("from_DisplayChatsAdapter")) {
-                    UserID = getIntent().getExtras().getString("SellerID");
+                    UserID = getIntent().getExtras().getString("CustomerID");
                 }
 
                 message_recycler.setHasFixedSize(true);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                 linearLayoutManager.setStackFromEnd(true);
                 message_recycler.setLayoutManager(linearLayoutManager);
-                ReadMessage(MyUserID,UserID);
+                ReadMessage(UserID,MyUserID);
                 UpdateToken(FirebaseInstanceId.getInstance().getToken());
             }
         }
@@ -106,8 +108,8 @@ public class ChatAct extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String, Object> ChatMap = new HashMap<>();
-        ChatMap.put("sender",sender);
-        ChatMap.put("receiver",receiver);
+        ChatMap.put("from",sender);
+        ChatMap.put("to",receiver);
         ChatMap.put("message",message);
         reference.child("Chats").push().setValue(ChatMap);
 
@@ -130,10 +132,6 @@ public class ChatAct extends AppCompatActivity {
                 users.setUser_ID(UserID);
                 users.setImgUri(SellerImg);
 
-               /* if (notify) {
-                    sendSellerNotification(receiver, users.getFirstName() + " " + users.getLastName(), msg);
-                }
-                notify = false;*/
             }
 
             @Override
