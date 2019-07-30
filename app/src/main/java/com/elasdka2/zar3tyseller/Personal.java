@@ -129,7 +129,10 @@ public class Personal extends Fragment {
 
     @OnClick(R.id.MyOrdersCard)
     public void GoToOrders() {
-        Toast.makeText(context.getApplicationContext(), "it will done soon isa ...", Toast.LENGTH_SHORT).show();
+        Orders fragment = new Orders();
+        FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
+        fragmentTransaction1.replace(R.id.Frame_Content, fragment);
+        fragmentTransaction1.commit();
     }
 
     @OnClick(R.id.sign_out_text)
@@ -148,7 +151,6 @@ public class Personal extends Fragment {
     public Personal() {
         // Required empty public constructor
     }
-
 
     public static Personal newInstance(String param1, String param2) {
         Personal fragment = new Personal();
@@ -171,23 +173,25 @@ public class Personal extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         try {
-            if (getArguments() != null){
+            if (getArguments() != null) {
                 intent_from = getArguments().getString("UniqueID");
-                if (!TextUtils.isEmpty(intent_from)){
-                    if (intent_from.equals("DeleteItemCase")){
+                if (!TextUtils.isEmpty(intent_from)) {
+                    if (intent_from.equals("DeleteItemCase")) {
                         MyItems fragment = new MyItems();
                         FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
                         fragmentTransaction1.replace(R.id.Frame_Content, fragment);
                         fragmentTransaction1.commit();
-                    }else {
-                        Toast.makeText(getActivity(),"Empty",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Empty", Toast.LENGTH_LONG).show();
                     }
                 }
             }
-        }catch (Exception e){
-            Toast.makeText(getActivity(),e.getMessage(),Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
         }
+
         View v = inflater.inflate(R.layout.personal_frag, container, false);
         context = getActivity();
         ButterKnife.bind(this, v);
@@ -249,10 +253,6 @@ public class Personal extends Fragment {
 
             if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
 
-              /*  SelectCategory fragment = new SelectCategory();
-                FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
-                fragmentTransaction1.replace(R.id.Frame_Content, fragment, "SelectCategory");
-                fragmentTransaction1.commit();*/
                 if (doubleBackToExitPressedOnce) {
                     ((Activity) context).moveTaskToBack(true);
 
@@ -262,7 +262,6 @@ public class Personal extends Fragment {
 
                     new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 2000);
                 }
-
 
                 return true;
 

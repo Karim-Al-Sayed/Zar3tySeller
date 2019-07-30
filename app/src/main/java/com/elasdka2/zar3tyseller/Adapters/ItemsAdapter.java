@@ -126,7 +126,18 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MyViewHolder
                                         Toast.makeText(context.getApplicationContext(),
                                                 sellerlist.get(position).getTitle() + " has been deleted successfully",
                                                 Toast.LENGTH_SHORT).show();
+                                        Personal fragment = new Personal();
+                                        Bundle args = new Bundle();
+                                        args.putString("UniqueID","DeleteItemCase");
+                                        fragment.setArguments(args);
 
+                                        FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                                        FragmentTransaction fragmentTransaction1 = manager.beginTransaction();
+                                        fragmentTransaction1.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
+                                        fragmentTransaction1.replace(R.id.Frame_Content, fragment);
+                                        fragmentTransaction1.commit();
+                                        sellerlist.remove(position);
+                                        notifyItemRemoved(position);
                                         sellerlist.remove(position);
                                         notifyItemRemoved(position);
                                         notifyItemRangeChanged(position, getItemCount());
