@@ -35,6 +35,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -66,13 +68,16 @@ public class Personal extends Fragment {
     Context context;
     private FirebaseAuth mAuth;
     private DatabaseReference UserRef;
-
+    List<Integer> balanceList;
+    Integer finalBalance;
     String ImgUri, UserName, Phone, Country, CurrentUserID, intent_from;
     View v;
     /* @BindView(R.id.adView)
      AdView mAdView;*/
     @BindView(R.id.welcome_name_txt)
     TextView welcome_name;
+    @BindView(R.id.balance_card_text_value)
+    TextView balance;
     @BindView(R.id.email_txt)
     TextView welcome_mail;
     @BindView(R.id.sign_out_text)
@@ -173,6 +178,30 @@ public class Personal extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        finalBalance=0;
+        mAuth = FirebaseAuth.getInstance();
+
+        CurrentUserID = mAuth.getCurrentUser().getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference BalanceRef = database.getReference("Balance");
+        BalanceRef.child(CurrentUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    String balance = (String) dataSnapshot1.child("Balance").getValue();
+                    Toast.makeText(context, balance, Toast.LENGTH_SHORT).show();
+                   Integer totalBalance = Integer.parseInt(balance);
+                    finalBalance=finalBalance+totalBalance;
+                }
+                balance.setText(finalBalance+"");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         try {
             if (getArguments() != null) {
@@ -196,9 +225,8 @@ public class Personal extends Fragment {
         context = getActivity();
         ButterKnife.bind(this, v);
 
-        mAuth = FirebaseAuth.getInstance();
+
         UserRef = FirebaseDatabase.getInstance().getReference("Users").child("Sellers");
-        CurrentUserID = mAuth.getCurrentUser().getUid();
 
         SharedPreferences pref = context.getApplicationContext().getSharedPreferences("CurrentUser", MODE_PRIVATE);
         welcome_name.setText(pref.getString("UserName", ""));
