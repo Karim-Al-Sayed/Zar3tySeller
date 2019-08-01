@@ -3,6 +3,7 @@ package com.elasdka2.zar3tyseller;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -230,15 +232,14 @@ public class UpdateUserData extends Fragment {
         phone_update.setText(getArguments().getString("UserPhone"));
         country_update.setText(getArguments().getString("UserCountry"));
         Glide.with(context.getApplicationContext()).load(getArguments().getString("UserImg")).into(img_update);
+
+        SharedPreferences.Editor editor = context.getSharedPreferences("CurrentUser", MODE_PRIVATE).edit();
+        editor.putString("UserName", user_name_update.getText().toString());
+        editor.putString("UserMail", getArguments().getString("UserMail"));
+        editor.apply();
+
         return v;
     }
-
-    /*@Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-    }*/
 
     @Override
     public void onResume() {
@@ -250,10 +251,15 @@ public class UpdateUserData extends Fragment {
         getView().setOnKeyListener((v, keyCode, event) -> {
 
             if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                Bundle args = new Bundle();
+                args.putString("UserName",user_name_update.getText().toString());
+                args.putString("UserName",getArguments().getString("UserMail"));
+                args.putString("UniqueID","from_UpdateUserData");
 
                 Personal fragment = new Personal();
+                fragment.setArguments(args);
                 FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
-                fragmentTransaction1.replace(R.id.Frame_Content, fragment, "Personal");
+                fragmentTransaction1.replace(R.id.Frame_Content, fragment);
                 fragmentTransaction1.commit();
 
                 return true;

@@ -23,8 +23,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +39,7 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
     private BottomSheetListener myListener;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference OrdersRef;
+    private DatabaseReference OrdersRef,PendingRef;
     String CurrentUserID;
     Button done_btn, skip_btn;
     EditText discount;
@@ -43,37 +47,30 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
     CheckBox add_discount;
     TextWatcher txtListener;
     Integer quantity,price,TotalPrice;
-
+    Map<String, String> OrdersMap;
     private void CheckDataAndSendAccept() {
         if (add_discount.isChecked()) {
-            discount.setEnabled(true);
             String str_complaint = discount.getText().toString();
             if (TextUtils.isEmpty(str_complaint)) {
                 Toast.makeText(getActivity(), "Enter Discount value !", Toast.LENGTH_LONG).show();
-            } else {
-                SendOrderToFirebase();
+                return;
             }
-        }
-    }
-    private void CheckDataAndSendReject() {
-        if (add_discount.isChecked()) {
-            discount.setEnabled(true);
-            String str_complaint = discount.getText().toString();
-            if (TextUtils.isEmpty(str_complaint)) {
-                Toast.makeText(getActivity(), "Enter Discount value !", Toast.LENGTH_LONG).show();
-            } else {
-                SendOrderToFirebase();
+            if (discount.getText().toString().startsWith("0")){
+                Toast.makeText(getActivity(), "Can't Start with 0 ( zero )", Toast.LENGTH_LONG).show();
+                return;
             }
-        }
+                SendOrderToFirebase();
+
+        }else Toast.makeText(getActivity(),"Add Discount or Click On Skip Button",Toast.LENGTH_LONG).show();
     }
     private void SendOrderToFirebase() {
         if (getArguments() != null) {
 
-            Map<String, String> OrdersMap = new HashMap<>();
+            OrdersMap = new HashMap<>();
             OrdersMap.put("CustomerID", Objects.requireNonNull(getArguments().getString("CustomerID")));
             OrdersMap.put("ItemImg", Objects.requireNonNull(getArguments().getString("ItemImg")));
             OrdersMap.put("ItemTitle", Objects.requireNonNull(getArguments().getString("ItemTitle")));
-            OrdersMap.put("ItemPrice", Objects.requireNonNull(getArguments().getString("ItemPrice")));
+            OrdersMap.put("ItemPrice",new_price_val.getText().toString());
             OrdersMap.put("ItemQuantity", Objects.requireNonNull(getArguments().getString("ItemQuantity")));
             OrdersMap.put("RequestDate", Objects.requireNonNull(getArguments().getString("RequestDate")));
             OrdersMap.put("SellerID", CurrentUserID);
@@ -81,10 +78,48 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
 
             OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
+
+
                     Toast.makeText(getActivity(), "Done", Toast.LENGTH_LONG).show();
                     dismiss();
                 } else
-                    Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),
+                            Objects.requireNonNull(task.getException()).getMessage(),
+                            Toast.LENGTH_LONG).show();
+            });
+        }
+
+    }
+    private void SendOrderToFirebaseSkip() {
+        if (getArguments() != null) {
+
+            Map<String,String> OrdersMap = new HashMap<>();
+            OrdersMap.put("CustomerID", Objects.requireNonNull(getArguments().getString("CustomerID")));
+            OrdersMap.put("ItemImg", Objects.requireNonNull(getArguments().getString("ItemImg")));
+            OrdersMap.put("ItemTitle", Objects.requireNonNull(getArguments().getString("ItemTitle")));
+            OrdersMap.put("ItemPrice", getArguments().getString("ItemPrice") + " EGP");
+            OrdersMap.put("ItemQuantity", Objects.requireNonNull(getArguments().getString("ItemQuantity")));
+            OrdersMap.put("RequestDate", Objects.requireNonNull(getArguments().getString("RequestDate")));
+            OrdersMap.put("SellerID", CurrentUserID);
+            OrdersMap.put("State", "Accepted");
+
+            OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    PendingRef.child(Objects.requireNonNull(getArguments().getString("ItemKey"))).removeValue()
+                            .addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()){
+                                    Toast.makeText(getActivity(), "Done", Toast.LENGTH_LONG).show();
+                                    dismiss();
+                                }else Toast.makeText(getActivity(),
+                                        Objects.requireNonNull(task1.getException()).getMessage(),
+                                        Toast.LENGTH_LONG).show();
+
+                            });
+
+                } else
+                    Toast.makeText(getActivity(),
+                            Objects.requireNonNull(task.getException()).getMessage(),
+                            Toast.LENGTH_LONG).show();
             });
         }
 
@@ -98,7 +133,9 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
 
         mAuth = FirebaseAuth.getInstance();
         OrdersRef = FirebaseDatabase.getInstance().getReference("Orders");
+        PendingRef = FirebaseDatabase.getInstance().getReference("Pending Requests");
         CurrentUserID = mAuth.getCurrentUser().getUid();
+        OrdersMap = new HashMap<>();
 
         done_btn = v.findViewById(R.id.done_discount_btn);
         skip_btn = v.findViewById(R.id.skip_discount_btn);
@@ -130,7 +167,7 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
 
         });
         skip_btn.setOnClickListener(v12 -> {
-            CheckDataAndSendReject();
+            SendOrderToFirebaseSkip();
         });
 
         if (getArguments() != null){
@@ -144,15 +181,18 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
             public void onTextChanged(CharSequence arg0, int arg1, int arg2,
                                       int arg3) {
                 if (discount.length() == 0){
-                    new_price_val.setText(String.valueOf(price));
+                    new_price_val.setText(price + " EGP");
+
                 }else {
                     new_price_val.setText(CalcSalary(price) + " EGP");
-                }            }
+
+                }
+            }
 
             @Override
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
                                           int arg3) {
-                new_price_val.setText(String.valueOf(price));
+                new_price_val.setText(price + " EGP");
 
                 // TODO Auto-generated method stub
             }
@@ -161,7 +201,7 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
             public void afterTextChanged(Editable arg0) {
                 // TODO Auto-generated method stub
                 if (discount.length() == 0){
-                    new_price_val.setText(String.valueOf(price));
+                    new_price_val.setText(price + " EGP");
                 }else {
                     new_price_val.setText(CalcSalary(price) + " EGP");
                 }

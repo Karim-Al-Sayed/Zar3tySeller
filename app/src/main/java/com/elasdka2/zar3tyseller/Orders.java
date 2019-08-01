@@ -109,6 +109,7 @@ public class Orders extends Fragment implements DiscountBottomSheetDialog.Bottom
                         orderItems.setSellerid(mAuth.getCurrentUser().getUid());
                         orderItems.setQuantity(quantity);
                         orderItems.setPrice(price);
+                        orderItems.setKey(ds.getKey());
                         orderItems.setCustomername(customerName);
                         orderItems.setCustomerimg(customerImg);
                         orderItems.setTitle(title);

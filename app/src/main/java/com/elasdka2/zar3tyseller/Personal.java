@@ -67,7 +67,7 @@ public class Personal extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference UserRef;
 
-    String ImgUri, UserName, Phone, Country, CurrentUserID, intent_from;
+    String ImgUri, UserName,UserMail, Phone, Country, CurrentUserID, intent_from;
     View v;
     /* @BindView(R.id.adView)
      AdView mAdView;*/
@@ -95,6 +95,7 @@ public class Personal extends Fragment {
         UpdateUserData fragment = new UpdateUserData();
         Bundle args = new Bundle();
         args.putString("UserName", UserName);
+        args.putString("UserMail", UserMail);
         args.putString("UserPhone", Phone);
         args.putString("UserCountry", Country);
         args.putString("UserImg", ImgUri);
@@ -183,7 +184,10 @@ public class Personal extends Fragment {
                         FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
                         fragmentTransaction1.replace(R.id.Frame_Content, fragment);
                         fragmentTransaction1.commit();
-                    } else {
+                    }else if ((intent_from.equals("from_UpdateUserData"))){
+                        welcome_mail.setText(getArguments().getString("UserMail"));
+                        welcome_name.setText(getArguments().getString("UserName"));
+                    }else {
                         Toast.makeText(getActivity(), "Empty", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -224,11 +228,13 @@ public class Personal extends Fragment {
             public void onDataChange(DataSnapshot UsersSnap) {
 
                 String user_name = UsersSnap.child("UserName").getValue(String.class);
+                String user_mail = UsersSnap.child("UserMail").getValue(String.class);
                 String user_phone = UsersSnap.child("Phone").getValue(String.class);
                 String user_country = UsersSnap.child("Country").getValue(String.class);
                 String user_img_uri = UsersSnap.child("ImgUri").getValue(String.class);
 
                 UserName = user_name;
+                UserMail = user_mail;
                 Phone = user_phone;
                 Country = user_country;
                 ImgUri = user_img_uri;

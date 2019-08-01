@@ -102,6 +102,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
             Bundle args = new Bundle();
             args.putString("ItemTitle",orderslist.get(position).getTitle());
             args.putString("ItemPrice",orderslist.get(position).getPrice());
+            args.putString("ItemKey",orderslist.get(position).getKey());
             args.putString("ItemImg",orderslist.get(position).getItemimg());
             args.putString("ItemQuantity",orderslist.get(position).getQuantity());
             args.putString("CustomerID",orderslist.get(position).getCustomerid());
