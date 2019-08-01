@@ -66,6 +66,7 @@ public class Personal extends Fragment {
     Context context;
     private FirebaseAuth mAuth;
     private DatabaseReference UserRef;
+    Integer finalBalance;
 
     String ImgUri, UserName,UserMail, Phone, Country, CurrentUserID, intent_from;
     View v;
@@ -75,6 +76,8 @@ public class Personal extends Fragment {
     TextView welcome_name;
     @BindView(R.id.email_txt)
     TextView welcome_mail;
+    @BindView(R.id.balance_card_text_value)
+    TextView balance;
     @BindView(R.id.sign_out_text)
     TextView sign_out;
     @BindView(R.id.UpdateDataCard)
@@ -174,6 +177,30 @@ public class Personal extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        finalBalance=0;
+        mAuth = FirebaseAuth.getInstance();
+
+        CurrentUserID = mAuth.getCurrentUser().getUid();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference BalanceRef = database.getReference("Balance");
+        BalanceRef.child(CurrentUserID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    String balance = (String) dataSnapshot1.child("Balance").getValue();
+                    Integer totalBalance = Integer.parseInt(balance);
+                    finalBalance=finalBalance+totalBalance;
+                }
+                balance.setText(finalBalance+"");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         try {
             if (getArguments() != null) {
