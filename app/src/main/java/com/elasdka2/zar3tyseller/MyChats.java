@@ -1,7 +1,6 @@
 package com.elasdka2.zar3tyseller;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -19,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.elasdka2.zar3tyseller.Adapters.DisplayChatsAdapter;
-import com.elasdka2.zar3tyseller.Helper.ChatsRecylcerItemTouchHelperListener;
+import com.elasdka2.zar3tyseller.Helper.RecyclerItemTouchHelperListener;
 import com.elasdka2.zar3tyseller.Helper.ChatsSellerRecylcerItemTouchHelper;
 import com.elasdka2.zar3tyseller.Model.ChatList;
 import com.elasdka2.zar3tyseller.Model.Users;
@@ -50,7 +49,7 @@ import butterknife.ButterKnife;
  * Use the {@link MyChats#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MyChats extends Fragment implements ChatsRecylcerItemTouchHelperListener {
+public class MyChats extends Fragment implements RecyclerItemTouchHelperListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";

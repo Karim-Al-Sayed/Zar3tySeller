@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,6 +49,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
     private ArrayList<OrderItems> orderslist;
     Context context;
     DatabaseReference OrdersRef;
+    String part1;
     public OrdersAdapter(ArrayList<OrderItems> orderslist, Context context) {
         this.orderslist = orderslist;
         this.itemsList = new ArrayList<>();
@@ -91,6 +93,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
         holder.Item_Title.setText(orderslist.get(position).getTitle());
         holder.Item_Price.setText(orderslist.get(position).getPrice());
 
+        String string = orderslist.get(position).getPrice();
+        String[] parts = string.split(" ");
+        part1 = parts[0]; // Money
+
         holder.AcceptBtn.setOnClickListener(v -> {
             FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
             Bundle args = new Bundle();
@@ -108,34 +114,37 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
             discountBottomSheetDialog.show(manager,"");
         });
 
-        holder.RejectBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog alertDialog = new AlertDialog.Builder(v.getRootView().getContext()).create();
-                alertDialog.setTitle("Warning !");
-                alertDialog.setMessage("Reject " +holder.Item_Title.getText().toString());
+        holder.RejectBtn.setOnClickListener(v -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(v.getRootView().getContext()).create();
+            alertDialog.setTitle("Warning !");
+            alertDialog.setMessage("Reject " +holder.Item_Title.getText().toString());
 
-                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "REJECT",
-                        (dialog, which) -> {
-                            Map<String, String> OrdersMap = new HashMap<>();
-                            OrdersMap.put("CustomerID", orderslist.get(position).getCustomerid());
-                            OrdersMap.put("ItemImg", orderslist.get(position).getItemimg());
-                            OrdersMap.put("ItemTitle", orderslist.get(position).getTitle());
-                            OrdersMap.put("ItemPrice", orderslist.get(position).getPrice());
-                            OrdersMap.put("ItemQuantity", orderslist.get(position).getQuantity());
-                            OrdersMap.put("RequestDate", orderslist.get(position).getDate());
-                            OrdersMap.put("SellerID", orderslist.get(position).getSellerid());
-                            OrdersMap.put("State", "Rejected");
-                            OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
-                                if (task.isSuccessful()){
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "REJECT",
+                    (dialog, which) -> {
+                        Map<String, String> OrdersMap = new HashMap<>();
+                        OrdersMap.put("CustomerID", orderslist.get(position).getCustomerid());
+                        OrdersMap.put("ItemImg", orderslist.get(position).getItemimg());
+                        OrdersMap.put("ItemTitle", orderslist.get(position).getTitle());
+                        OrdersMap.put("ItemPrice", orderslist.get(position).getPrice());
+                        OrdersMap.put("ItemQuantity", orderslist.get(position).getQuantity());
+                        OrdersMap.put("RequestDate", orderslist.get(position).getDate());
+                        OrdersMap.put("SellerID", orderslist.get(position).getSellerid());
+                        OrdersMap.put("State", "Rejected");
+                        OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()){
+                                dialog.dismiss();
+                                Toast.makeText(context.getApplicationContext(),
+                                        orderslist.get(position).getTitle() + "has been Rejected",
+                                        Toast.LENGTH_LONG).show();
 
-                                }
-                            });
+                            }else Toast.makeText(context.getApplicationContext(),
+                                    Objects.requireNonNull(task.getException()).getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         });
-                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", (dialog, which) -> dialog.dismiss());
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", (dialog, which) -> dialog.dismiss());
 
-                alertDialog.show();
-            }
+            alertDialog.show();
         });
     }
 
@@ -158,6 +167,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
         CircleImageView CustomerImg;
         CardView Card_Item;
         Button AcceptBtn, RejectBtn;
+        public ConstraintLayout accept,reject,foreground;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -170,6 +181,10 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
             Card_Item = itemView.findViewById(R.id.order_card_item_row);
             AcceptBtn = itemView.findViewById(R.id.order_accept_btn_row);
             RejectBtn = itemView.findViewById(R.id.order_reject_btn_row);
+            accept = itemView.findViewById(R.id.accept_back);
+            reject = itemView.findViewById(R.id.delete_background);
+            foreground = itemView.findViewById(R.id.order_foreground);
+
         }
     }
 }

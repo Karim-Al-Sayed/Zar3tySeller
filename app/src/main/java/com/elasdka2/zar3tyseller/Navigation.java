@@ -20,7 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class Navigation extends AppCompatActivity implements ComplaintBottomSheetDialog.BottomSheetListener,
-                            LanguageBottomSheetDialog.BottomSheetListener{
+                            LanguageBottomSheetDialog.BottomSheetListener,DiscountBottomSheetDialog.BottomSheetListener{
     @BindView(R.id.bottom_nav)
     BottomNavigationView navigation;
 
@@ -80,6 +80,9 @@ public class Navigation extends AppCompatActivity implements ComplaintBottomShee
 
         LanguageBottomSheetDialog languageBottomSheetDialog = new LanguageBottomSheetDialog();
         languageBottomSheetDialog.setCancelable(false);
+
+        DiscountBottomSheetDialog discountBottomSheetDialog = new DiscountBottomSheetDialog();
+        discountBottomSheetDialog.setCancelable(true);
 
         mAuth = FirebaseAuth.getInstance();
         UserRef = FirebaseDatabase.getInstance().getReference("Users").child("Sellers");

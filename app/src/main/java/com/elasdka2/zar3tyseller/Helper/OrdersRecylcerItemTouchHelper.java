@@ -8,11 +8,11 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.elasdka2.zar3tyseller.Adapters.DisplayChatsAdapter;
+import com.elasdka2.zar3tyseller.Adapters.OrdersAdapter;
 
-public class ChatsSellerRecylcerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
+public class OrdersRecylcerItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     private RecyclerItemTouchHelperListener listener;
-    public ChatsSellerRecylcerItemTouchHelper(int dragDirs, int swipeDirs, RecyclerItemTouchHelperListener listener) {
+    public OrdersRecylcerItemTouchHelper(int dragDirs, int swipeDirs, RecyclerItemTouchHelperListener listener) {
         super(dragDirs, swipeDirs);
         this.listener = listener;
     }
@@ -31,20 +31,20 @@ public class ChatsSellerRecylcerItemTouchHelper extends ItemTouchHelper.SimpleCa
 
     @Override
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        View foreground = ((DisplayChatsAdapter.ViewHolder)viewHolder).view_foreground;
+        View foreground = ((OrdersAdapter.MyViewHolder)viewHolder).foreground;
         getDefaultUIUtil().clearView(foreground);
     }
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        View foreground = ((DisplayChatsAdapter.ViewHolder)viewHolder).view_foreground;
+        View foreground = ((OrdersAdapter.MyViewHolder)viewHolder).foreground;
         getDefaultUIUtil().onDraw(c,recyclerView,foreground,dX,dY,actionState,isCurrentlyActive);
 
     }
 
     @Override
     public void onChildDrawOver(@NonNull Canvas c, @NonNull RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-        View foreground = ((DisplayChatsAdapter.ViewHolder)viewHolder).view_foreground;
+        View foreground = ((OrdersAdapter.MyViewHolder)viewHolder).foreground;
         getDefaultUIUtil().onDrawOver(c,recyclerView,foreground,dX,dY,actionState,isCurrentlyActive);
 
     }
@@ -52,7 +52,7 @@ public class ChatsSellerRecylcerItemTouchHelper extends ItemTouchHelper.SimpleCa
     @Override
     public void onSelectedChanged(@Nullable RecyclerView.ViewHolder viewHolder, int actionState) {
         if (viewHolder != null){
-            View foreground = ((DisplayChatsAdapter.ViewHolder)viewHolder).view_foreground;
+            View foreground = ((OrdersAdapter.MyViewHolder)viewHolder).foreground;
             getDefaultUIUtil().onSelected(foreground);
         }
     }

@@ -1,14 +1,19 @@
 package com.elasdka2.zar3tyseller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,22 +39,36 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
     String CurrentUserID;
     Button done_btn, skip_btn;
     EditText discount;
+    TextView new_price_tag,new_price_val;
     CheckBox add_discount;
+    TextWatcher txtListener;
+    Integer quantity,price,TotalPrice;
 
-    private void CheckDataAndSend() {
+    private void CheckDataAndSendAccept() {
         if (add_discount.isChecked()) {
             discount.setEnabled(true);
             String str_complaint = discount.getText().toString();
             if (TextUtils.isEmpty(str_complaint)) {
-                Toast.makeText(getActivity(), "Enter new price !", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Enter Discount value !", Toast.LENGTH_LONG).show();
             } else {
-                SendDiscountOrderToFirebase();
+                SendOrderToFirebase();
             }
         }
     }
-
-    private void SendDiscountOrderToFirebase() {
+    private void CheckDataAndSendReject() {
+        if (add_discount.isChecked()) {
+            discount.setEnabled(true);
+            String str_complaint = discount.getText().toString();
+            if (TextUtils.isEmpty(str_complaint)) {
+                Toast.makeText(getActivity(), "Enter Discount value !", Toast.LENGTH_LONG).show();
+            } else {
+                SendOrderToFirebase();
+            }
+        }
+    }
+    private void SendOrderToFirebase() {
         if (getArguments() != null) {
+
             Map<String, String> OrdersMap = new HashMap<>();
             OrdersMap.put("CustomerID", Objects.requireNonNull(getArguments().getString("CustomerID")));
             OrdersMap.put("ItemImg", Objects.requireNonNull(getArguments().getString("ItemImg")));
@@ -81,44 +100,85 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
         OrdersRef = FirebaseDatabase.getInstance().getReference("Orders");
         CurrentUserID = mAuth.getCurrentUser().getUid();
 
-        discount = v.findViewById(R.id.done_discount_btn);
+        done_btn = v.findViewById(R.id.done_discount_btn);
         skip_btn = v.findViewById(R.id.skip_discount_btn);
         discount = v.findViewById(R.id.discount_edit_text);
         add_discount = v.findViewById(R.id.discount_check_box);
+        new_price_tag = v.findViewById(R.id.new_price_tag);
+        new_price_val = v.findViewById(R.id.new_price_value);
 
+        new_price_val.setText(getArguments().getString("ItemPrice" + " EGP"));
+        discount.setText("0");
         add_discount.setChecked(false);
-        discount.setEnabled(false);
 
-        discount.setOnClickListener(v1 -> {
-            //  Toast.makeText(getActivity(),"Send Clicked",Toast.LENGTH_SHORT).show();
-            CheckDataAndSend();
-
-        });
-        skip_btn.setOnClickListener(v12 -> {
-            if (getArguments() != null) {
-                Map<String, String> OrdersMap = new HashMap<>();
-                OrdersMap.put("CustomerID", Objects.requireNonNull(getArguments().getString("CustomerID")));
-                OrdersMap.put("ItemImg", Objects.requireNonNull(getArguments().getString("ItemImg")));
-                OrdersMap.put("ItemTitle", Objects.requireNonNull(getArguments().getString("ItemTitle")));
-                OrdersMap.put("ItemPrice", Objects.requireNonNull(getArguments().getString("ItemPrice")));
-                OrdersMap.put("ItemQuantity", Objects.requireNonNull(getArguments().getString("ItemQuantity")));
-                OrdersMap.put("RequestDate", Objects.requireNonNull(getArguments().getString("RequestDate")));
-                OrdersMap.put("SellerID", CurrentUserID);
-                OrdersMap.put("State", "Accepted");
-
-                OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(getActivity(), "Done", Toast.LENGTH_LONG).show();
-                        dismiss();
-                    } else
-                        Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
-                });
+        add_discount.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (b){
+                discount.setVisibility(View.VISIBLE);
+                new_price_tag.setVisibility(View.VISIBLE);
+                new_price_val.setVisibility(View.VISIBLE);
+            }else {
+                discount.setVisibility(View.GONE);
+                new_price_tag.setVisibility(View.GONE);
+                new_price_val.setVisibility(View.GONE);
             }
         });
 
+
+        done_btn.setOnClickListener(v1 -> {
+            //  Toast.makeText(getActivity(),"Send Clicked",Toast.LENGTH_SHORT).show();
+            CheckDataAndSendAccept();
+
+        });
+        skip_btn.setOnClickListener(v12 -> {
+            CheckDataAndSendReject();
+        });
+
+        if (getArguments() != null){
+            price = Integer.parseInt(getArguments().getString("ItemPrice"));
+        }
+    //------------------------------------------------------
+        txtListener = new TextWatcher() {
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+                                      int arg3) {
+                if (discount.length() == 0){
+                    new_price_val.setText(String.valueOf(price));
+                }else {
+                    new_price_val.setText(CalcSalary(price) + " EGP");
+                }            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+                                          int arg3) {
+                new_price_val.setText(String.valueOf(price));
+
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+                // TODO Auto-generated method stub
+                if (discount.length() == 0){
+                    new_price_val.setText(String.valueOf(price));
+                }else {
+                    new_price_val.setText(CalcSalary(price) + " EGP");
+                }
+
+            }
+        };
+        discount.addTextChangedListener(txtListener);
+
+        //------------------------------------------------------
         return v;
     }
-
+    private Integer CalcSalary(Integer p) {
+       p= price ;
+        quantity = Integer.parseInt(discount.getText().toString());
+        TotalPrice = p - quantity;
+        return TotalPrice;
+    }
     public interface BottomSheetListener {
         void onButtonClicked(String text);
     }

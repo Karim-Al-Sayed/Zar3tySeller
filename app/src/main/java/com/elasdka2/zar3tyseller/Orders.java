@@ -11,9 +11,13 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.elasdka2.zar3tyseller.Adapters.OrdersAdapter;
+import com.elasdka2.zar3tyseller.Helper.ChatsSellerRecylcerItemTouchHelper;
+import com.elasdka2.zar3tyseller.Helper.OrdersRecylcerItemTouchHelper;
+import com.elasdka2.zar3tyseller.Helper.RecyclerItemTouchHelperListener;
 import com.elasdka2.zar3tyseller.Model.OrderItems;
 import com.elasdka2.zar3tyseller.Model.SellerItems;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,7 +34,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class Orders extends Fragment implements DiscountBottomSheetDialog.BottomSheetListener{
+public class Orders extends Fragment implements DiscountBottomSheetDialog.BottomSheetListener,
+                                                RecyclerItemTouchHelperListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -89,14 +94,14 @@ public class Orders extends Fragment implements DiscountBottomSheetDialog.Bottom
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot ds : dataSnapshot.getChildren()){
-                        String title = ds.child("Item_Title").getValue(String.class);
-                        String price = ds.child("Price").getValue(String.class);
-                        String quantity = ds.child("Quantity").getValue(String.class);
-                        String request_date = ds.child("Request_Date").getValue(String.class);
+                        String title = ds.child("ItemTitle").getValue(String.class);
+                        String price = ds.child("ItemPrice").getValue(String.class);
+                        String quantity = ds.child("ItemQuantity").getValue(String.class);
+                        String request_date = ds.child("RequestDate").getValue(String.class);
                         String customerID = ds.child("CustomerID").getValue(String.class);
-                        String customerName = ds.child("UserName").getValue(String.class);
-                        String customerImg = ds.child("UserImg").getValue(String.class);
-                        String itemImg = ds.child("Item_IMG").getValue(String.class);
+                        String customerName = ds.child("CustomerName").getValue(String.class);
+                        String customerImg = ds.child("CustomerImg").getValue(String.class);
+                        String itemImg = ds.child("ItemIMG").getValue(String.class);
 
                         OrderItems orderItems = new OrderItems();
                         orderItems.setCustomerid(customerID);
@@ -119,6 +124,13 @@ public class Orders extends Fragment implements DiscountBottomSheetDialog.Bottom
 
             }
         });
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback
+                = new OrdersRecylcerItemTouchHelper(0,ItemTouchHelper.LEFT,this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
+
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback2
+                = new OrdersRecylcerItemTouchHelper(0,ItemTouchHelper.RIGHT,this);
+        new ItemTouchHelper(itemTouchHelperCallback2).attachToRecyclerView(recyclerView);
 
         return v;
     }
@@ -145,6 +157,13 @@ public class Orders extends Fragment implements DiscountBottomSheetDialog.Bottom
     @Override
     public void onButtonClicked(String text) {
 
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (direction == ItemTouchHelper.RIGHT){
+
+        }
     }
 
 
