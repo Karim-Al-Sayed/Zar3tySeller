@@ -33,6 +33,7 @@ import com.elasdka2.zar3tyseller.Personal;
 import com.elasdka2.zar3tyseller.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,32 +49,40 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
     List<OrderItems> itemsList;
     private ArrayList<OrderItems> orderslist;
     Context context;
-    DatabaseReference OrdersRef;
-    String part1;
+    DatabaseReference OrdersRef, balanceREF;
+    String part1,CurrentUserID;
+    private FirebaseAuth mAuth;
+
     public OrdersAdapter(ArrayList<OrderItems> orderslist, Context context) {
         this.orderslist = orderslist;
         this.itemsList = new ArrayList<>();
         this.context = context;
     }
-    public void AddAll(List<OrderItems> newItem){
+
+    public void AddAll(List<OrderItems> newItem) {
         int initsize = itemsList.size();
         itemsList.addAll(newItem);
-        notifyItemRangeChanged(initsize,newItem.size());
+        notifyItemRangeChanged(initsize, newItem.size());
     }
-    public String getLastItemID(){
-        return itemsList.get(itemsList.size()-1).getKey();
-    }
-    public void RemoveLastItem(){
 
-        itemsList.remove(itemsList.size() -1);
+    public String getLastItemID() {
+        return itemsList.get(itemsList.size() - 1).getKey();
+    }
+
+    public void RemoveLastItem() {
+
+        itemsList.remove(itemsList.size() - 1);
 
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View ItemView = LayoutInflater.from(context).inflate(R.layout.order_row,parent,false);
+        View ItemView = LayoutInflater.from(context).inflate(R.layout.order_row, parent, false);
         OrdersRef = FirebaseDatabase.getInstance().getReference("Orders");
+        balanceREF = FirebaseDatabase.getInstance().getReference("Balance");
+        mAuth = FirebaseAuth.getInstance();
+        CurrentUserID = mAuth.getCurrentUser().getUid();
 
         return new MyViewHolder(ItemView);
 
@@ -82,7 +91,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        Animation myanim= AnimationUtils.loadAnimation(context,R.anim.stb2);
+        Animation myanim = AnimationUtils.loadAnimation(context, R.anim.stb2);
         holder.Card_Item.startAnimation(myanim);
 
         Glide.with(context.getApplicationContext()).load(orderslist.get(position).getCustomerimg()).into(holder.CustomerImg);
@@ -98,27 +107,32 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
         part1 = parts[0]; // Money
 
         holder.AcceptBtn.setOnClickListener(v -> {
-            FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+
+            Map<String, String> balanceMap = new HashMap<>();
+            balanceMap.put("Balance", orderslist.get(position).getPrice());
+            balanceMap.put("SellerID", CurrentUserID);
+            balanceREF.child(CurrentUserID).push().setValue(balanceMap);
+
+            FragmentManager manager = ((AppCompatActivity) context).getSupportFragmentManager();
             Bundle args = new Bundle();
-            args.putString("ItemTitle",orderslist.get(position).getTitle());
-            args.putString("ItemPrice",orderslist.get(position).getPrice());
-            args.putString("ItemKey",orderslist.get(position).getKey());
-            args.putString("ItemImg",orderslist.get(position).getItemimg());
-            args.putString("ItemQuantity",orderslist.get(position).getQuantity());
-            args.putString("CustomerID",orderslist.get(position).getCustomerid());
-            args.putString("SellerID",orderslist.get(position).getSellerid());
-            args.putString("RequestDate",orderslist.get(position).getDate());
+            args.putString("ItemTitle", orderslist.get(position).getTitle());
+            args.putString("ItemPrice", orderslist.get(position).getPrice());
+            args.putString("ItemImg", orderslist.get(position).getItemimg());
+            args.putString("ItemQuantity", orderslist.get(position).getQuantity());
+            args.putString("CustomerID", orderslist.get(position).getCustomerid());
+            args.putString("SellerID", orderslist.get(position).getSellerid());
+            args.putString("RequestDate", orderslist.get(position).getDate());
 
             DiscountBottomSheetDialog discountBottomSheetDialog = new DiscountBottomSheetDialog();
             discountBottomSheetDialog.setArguments(args);
 
-            discountBottomSheetDialog.show(manager,"");
+            discountBottomSheetDialog.show(manager, "");
         });
 
         holder.RejectBtn.setOnClickListener(v -> {
             AlertDialog alertDialog = new AlertDialog.Builder(v.getRootView().getContext()).create();
             alertDialog.setTitle("Warning !");
-            alertDialog.setMessage("Reject " +holder.Item_Title.getText().toString());
+            alertDialog.setMessage("Reject " + holder.Item_Title.getText().toString());
 
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "REJECT",
                     (dialog, which) -> {
@@ -132,13 +146,13 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
                         OrdersMap.put("SellerID", orderslist.get(position).getSellerid());
                         OrdersMap.put("State", "Rejected");
                         OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 dialog.dismiss();
                                 Toast.makeText(context.getApplicationContext(),
                                         orderslist.get(position).getTitle() + "has been Rejected",
                                         Toast.LENGTH_LONG).show();
 
-                            }else Toast.makeText(context.getApplicationContext(),
+                            } else Toast.makeText(context.getApplicationContext(),
                                     Objects.requireNonNull(task.getException()).getMessage(),
                                     Toast.LENGTH_LONG).show();
                         });
@@ -163,12 +177,12 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView Item_Title, Item_Price,CustomerName,RequestDate;
+        TextView Item_Title, Item_Price, CustomerName, RequestDate;
         ImageView Item_Img; // Karim
         CircleImageView CustomerImg;
         CardView Card_Item;
         Button AcceptBtn, RejectBtn;
-        public ConstraintLayout accept,reject,foreground;
+        public ConstraintLayout accept, reject, foreground;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
