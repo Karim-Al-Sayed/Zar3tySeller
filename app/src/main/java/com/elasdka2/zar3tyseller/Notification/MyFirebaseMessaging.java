@@ -44,7 +44,7 @@ public class MyFirebaseMessaging extends FirebaseMessagingService {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         SellerName = ds.child("UserName").getValue(String.class);
                     }
-                    }
+                }
             }
 
             @Override

@@ -30,11 +30,16 @@ import com.elasdka2.zar3tyseller.Model.OrderItems;
 import com.elasdka2.zar3tyseller.Model.SellerItems;
 import com.elasdka2.zar3tyseller.Personal;
 import com.elasdka2.zar3tyseller.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -66,7 +71,7 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View ItemView = LayoutInflater.from(context).inflate(R.layout.order_row,parent,false);
-        OrdersRef = FirebaseDatabase.getInstance().getReference("Pending Requests");
+        OrdersRef = FirebaseDatabase.getInstance().getReference("Orders");
 
         return new MyViewHolder(ItemView);
 
@@ -86,27 +91,50 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.MyViewHold
         holder.Item_Title.setText(orderslist.get(position).getTitle());
         holder.Item_Price.setText(orderslist.get(position).getPrice());
 
-        holder.AcceptBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
-                Bundle args = new Bundle();
-                args.putString("ItemTitle",orderslist.get(position).getTitle());
-                args.putString("ItemPrice",orderslist.get(position).getPrice());
-                args.putString("CustomerID",orderslist.get(position).getCustomerid());
-                args.putString("RequestDate",orderslist.get(position).getDate());
+        holder.AcceptBtn.setOnClickListener(v -> {
+            FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+            Bundle args = new Bundle();
+            args.putString("ItemTitle",orderslist.get(position).getTitle());
+            args.putString("ItemPrice",orderslist.get(position).getPrice());
+            args.putString("ItemImg",orderslist.get(position).getItemimg());
+            args.putString("ItemQuantity",orderslist.get(position).getQuantity());
+            args.putString("CustomerID",orderslist.get(position).getCustomerid());
+            args.putString("SellerID",orderslist.get(position).getSellerid());
+            args.putString("RequestDate",orderslist.get(position).getDate());
 
-                DiscountBottomSheetDialog discountBottomSheetDialog = new DiscountBottomSheetDialog();
-                discountBottomSheetDialog.setArguments(args);
+            DiscountBottomSheetDialog discountBottomSheetDialog = new DiscountBottomSheetDialog();
+            discountBottomSheetDialog.setArguments(args);
 
-                discountBottomSheetDialog.show(manager,"");
-            }
+            discountBottomSheetDialog.show(manager,"");
         });
 
         holder.RejectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AlertDialog alertDialog = new AlertDialog.Builder(v.getRootView().getContext()).create();
+                alertDialog.setTitle("Warning !");
+                alertDialog.setMessage("Reject " +holder.Item_Title.getText().toString());
 
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "REJECT",
+                        (dialog, which) -> {
+                            Map<String, String> OrdersMap = new HashMap<>();
+                            OrdersMap.put("CustomerID", orderslist.get(position).getCustomerid());
+                            OrdersMap.put("ItemImg", orderslist.get(position).getItemimg());
+                            OrdersMap.put("ItemTitle", orderslist.get(position).getTitle());
+                            OrdersMap.put("ItemPrice", orderslist.get(position).getPrice());
+                            OrdersMap.put("ItemQuantity", orderslist.get(position).getQuantity());
+                            OrdersMap.put("RequestDate", orderslist.get(position).getDate());
+                            OrdersMap.put("SellerID", orderslist.get(position).getSellerid());
+                            OrdersMap.put("State", "Rejected");
+                            OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
+                                if (task.isSuccessful()){
+
+                                }
+                            });
+                        });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", (dialog, which) -> dialog.dismiss());
+
+                alertDialog.show();
             }
         });
     }

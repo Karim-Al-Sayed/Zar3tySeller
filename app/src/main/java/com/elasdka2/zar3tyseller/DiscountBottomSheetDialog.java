@@ -52,22 +52,20 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
         if (getArguments() != null) {
             Map<String, String> OrdersMap = new HashMap<>();
             OrdersMap.put("CustomerID", Objects.requireNonNull(getArguments().getString("CustomerID")));
+            OrdersMap.put("ItemImg", Objects.requireNonNull(getArguments().getString("ItemImg")));
             OrdersMap.put("ItemTitle", Objects.requireNonNull(getArguments().getString("ItemTitle")));
             OrdersMap.put("ItemPrice", Objects.requireNonNull(getArguments().getString("ItemPrice")));
+            OrdersMap.put("ItemQuantity", Objects.requireNonNull(getArguments().getString("ItemQuantity")));
             OrdersMap.put("RequestDate", Objects.requireNonNull(getArguments().getString("RequestDate")));
             OrdersMap.put("SellerID", CurrentUserID);
             OrdersMap.put("State", "Accepted");
-            OrdersMap.put("Discount", "true");
 
-            OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(getActivity(), "Done", Toast.LENGTH_LONG).show();
-                        dismiss();
-                    } else
-                        Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
-                }
+            OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Done", Toast.LENGTH_LONG).show();
+                    dismiss();
+                } else
+                    Toast.makeText(getActivity(), Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
             });
         }
 
@@ -100,12 +98,13 @@ public class DiscountBottomSheetDialog extends BottomSheetDialogFragment {
             if (getArguments() != null) {
                 Map<String, String> OrdersMap = new HashMap<>();
                 OrdersMap.put("CustomerID", Objects.requireNonNull(getArguments().getString("CustomerID")));
+                OrdersMap.put("ItemImg", Objects.requireNonNull(getArguments().getString("ItemImg")));
                 OrdersMap.put("ItemTitle", Objects.requireNonNull(getArguments().getString("ItemTitle")));
                 OrdersMap.put("ItemPrice", Objects.requireNonNull(getArguments().getString("ItemPrice")));
+                OrdersMap.put("ItemQuantity", Objects.requireNonNull(getArguments().getString("ItemQuantity")));
                 OrdersMap.put("RequestDate", Objects.requireNonNull(getArguments().getString("RequestDate")));
                 OrdersMap.put("SellerID", CurrentUserID);
                 OrdersMap.put("State", "Accepted");
-                OrdersMap.put("Discount", "false");
 
                 OrdersRef.push().setValue(OrdersMap).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
