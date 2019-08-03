@@ -26,6 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        <activity android:name=".myOrders"></activity>
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,23 +37,21 @@
         <activity
             android:name=".Navigation"
             android:excludeFromRecents="true"
-            android:windowSoftInputMode="stateHidden|adjustResize">
-
-        </activity>
-        <activity android:name=".ChatAct"/>
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+        <activity android:name=".ChatAct" />
         <activity
             android:name=".Login"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".SignUp"
-            android:windowSoftInputMode="stateHidden|adjustResize">
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
 
-        </activity>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-9443216844473207~5221027236" />
 
-        <service android:name=".Notification.MyFirebaseMessaging"
+        <service
+            android:name=".Notification.MyFirebaseMessaging"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
