@@ -133,10 +133,8 @@ public class Personal extends Fragment {
 
     @OnClick(R.id.MyOrdersCard)
     public void GoToOrders() {
-        Orders fragment = new Orders();
-        FragmentTransaction fragmentTransaction1 = getFragmentManager().beginTransaction();
-        fragmentTransaction1.replace(R.id.Frame_Content, fragment);
-        fragmentTransaction1.commit();
+    Intent intent=new Intent(context.getApplicationContext(),myOrders.class);
+    startActivity(intent);
     }
 
     @OnClick(R.id.sign_out_text)
