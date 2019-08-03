@@ -48,7 +48,7 @@ import static android.content.Context.MODE_PRIVATE;
  * {@link Personal.OnFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link Personal#newInstance} factory method to
- * create an instance of this fragment.
+ * create an instance of this fragment.\
  */
 public class Personal extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

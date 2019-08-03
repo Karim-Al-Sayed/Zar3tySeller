@@ -1,7 +1,6 @@
 package com.elasdka2.zar3tyseller;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.elasdka2.zar3tyseller.Adapters.ChatAdapter;
 import com.elasdka2.zar3tyseller.Model.Chat;
-import com.elasdka2.zar3tyseller.Model.ChatSeller;
 import com.elasdka2.zar3tyseller.Model.Tokens;
-import com.elasdka2.zar3tyseller.Model.User;
 import com.elasdka2.zar3tyseller.Model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,8 +38,9 @@ import butterknife.OnClick;
 public class ChatAct extends AppCompatActivity {
     //----------------------------------
     private FirebaseAuth mAuth;
-    private DatabaseReference MyRef;
+    private DatabaseReference reference;
     private FirebaseUser MyUser;
+    ValueEventListener seenListener;
     Context context;
     String MyUserID,UserID, intent_from;
     //----------------------------------
@@ -96,13 +94,37 @@ public class ChatAct extends AppCompatActivity {
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                 linearLayoutManager.setStackFromEnd(true);
                 message_recycler.setLayoutManager(linearLayoutManager);
+
                 ReadMessage(UserID,MyUserID);
+
                 UpdateToken(FirebaseInstanceId.getInstance().getToken());
+
+                seenMessage(UserID);
             }
         }
 
     }
+    private void seenMessage(final String userid){
+        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener = reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if (chat.getTo().equals(MyUser.getUid()) && chat.getFrom().equals(userid)){
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("isseen", true);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     private void SendMessage(String sender, String receiver, String message){
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -111,6 +133,7 @@ public class ChatAct extends AppCompatActivity {
         ChatMap.put("from",sender);
         ChatMap.put("to",receiver);
         ChatMap.put("message",message);
+        ChatMap.put("isseen",false);
         reference.child("Chats").push().setValue(ChatMap);
 
         HashMap<String,Object> ChatListMap = new HashMap<>();
@@ -216,6 +239,7 @@ public class ChatAct extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        reference.removeEventListener(seenListener);
         currentUser("none");
     }
 }

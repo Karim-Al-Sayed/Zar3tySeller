@@ -4,14 +4,24 @@ public class Chat {
     public String from;
     public String to;
     public String message;
+    public boolean isseen;
 
     public Chat() {
     }
 
-    public Chat(String from, String to, String message) {
+    public Chat(String from, String to, String message, boolean isseen) {
         this.from = from;
         this.to = to;
         this.message = message;
+        this.isseen = isseen;
+    }
+
+    public boolean isIsseen() {
+        return isseen;
+    }
+
+    public void setIsseen(boolean isseen) {
+        this.isseen = isseen;
     }
 
     public String getFrom() {

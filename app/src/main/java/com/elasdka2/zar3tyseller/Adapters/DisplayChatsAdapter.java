@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.elasdka2.zar3tyseller.ChatAct;
 import com.elasdka2.zar3tyseller.Model.Chat;
-import com.elasdka2.zar3tyseller.Model.ChatSeller;
 import com.elasdka2.zar3tyseller.Model.Users;
 import com.elasdka2.zar3tyseller.R;
 import com.google.firebase.auth.FirebaseAuth;

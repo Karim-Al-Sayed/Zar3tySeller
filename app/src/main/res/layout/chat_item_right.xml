@@ -22,6 +22,12 @@
             android:text="hi friends"
             android:padding="8dp"
             />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_seen"
+            android:layout_below="@id/show_message"
+            android:layout_alignEnd="@+id/show_message"/>
     </RelativeLayout>
 
 </RelativeLayout>

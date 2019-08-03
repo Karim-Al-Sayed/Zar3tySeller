@@ -365,7 +365,6 @@ public class SignUp extends AppCompatActivity implements AdapterView.OnItemSelec
                                 //Toast.makeText(SignUp.this, "Profile Img Uploaded Successfully", Toast.LENGTH_SHORT).show();
                                 UsersMap.put("UserName", user_name.getText().toString());
                                 UsersMap.put("Mail", mail.getText().toString());
-                                UsersMap.put("Password", password.getText().toString());
                                 UsersMap.put("Phone", phone.getText().toString());
                                 UsersMap.put("National_ID", national_id.getText().toString());
                                 UsersMap.put("User_ID", user.getUid());

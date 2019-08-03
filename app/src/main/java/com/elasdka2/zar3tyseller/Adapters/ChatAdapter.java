@@ -1,5 +1,6 @@
 package com.elasdka2.zar3tyseller.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.elasdka2.zar3tyseller.Model.Chat;
-import com.elasdka2.zar3tyseller.Model.ChatSeller;
 import com.elasdka2.zar3tyseller.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,11 +44,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Chat chat = mChat.get(position);
         holder.message.setText(chat.getMessage());
        // holder.username.setVisibility(View.GONE);
+        if (position == mChat.size() - 1){
+
+            if (chat.isIsseen()){
+                holder.seen.setText("Seen");
+            }else holder.seen.setText("Delivered");
+
+        }else holder.seen.setVisibility(View.GONE);
     }
 
     @Override
@@ -57,11 +65,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView message, username;
+        TextView message, username, seen;
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.show_message);
             username = itemView.findViewById(R.id.chat_item_left_user_name);
+            seen = itemView.findViewById(R.id.txt_seen);
         }
     }
 
